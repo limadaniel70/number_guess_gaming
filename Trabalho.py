@@ -1,45 +1,57 @@
 import random
+import sys
 
 numero = random.randint(1, 100)
 
 print('Tente advinhar o número entre 1 e 100.')
 
-dificuldades = {
-1: {"Dificuldade": "Fácil", "Tentativas": 10},
-2: {"Dificuldade": "Medio", "Tentativas": 5},
-3: {"Dificuldade": "Difícil", "Tentativas": 3},
-}
+dificuldades = [
+    ("Fácil", 10),
+    ("Medio", 5),
+    ("Difícil", 3),
+    ("Impossível", 1)
+]
 
 print("""
 Escolha a dificuldade:
-1.  Facil
-2. Medio
-3. Dificil
+1. Fácil        (10 tentativa(s))
+2. Medio        (5  tentativa(s))
+3. Difícil      (3  tentativa(s))
+4. Impossível   (1  tentativa(s))
 """)
 
-d = int(input('Insira a dificuldade [1/2/3]: '))
+print('Insira a dificuldade [1/2/3/4]')
+try:
+    nivel = int(input("> "))
 
-n_de_tentativas = dificuldades[d]["Tentativas"]
+    if nivel < 1 or nivel > 4:
+        raise ValueError
+
+except TypeError:
+    print("O valor precisa ser um número!")
+    sys.exit(1)
+except ValueError:
+    print("Por favor, insira um valor válido")
+    sys.exit(1)
+
+nivel, tentativas = dificuldades[nivel - 1]
 tentativa = 0
 
-print(f"Você escolheu a dificuldade: {dificuldades[d]['Dificuldade']}")
-print(f"Total de tentativas: {n_de_tentativas}") 
+print(f"Você escolheu a dificuldade: {nivel}")
+print(f"Total de tentativas: {tentativas}") 
 
-while tentativa < n_de_tentativas:
-    print("-" * 40)
-    print(f"Tentativas restantes: {n_de_tentativas - tentativa}")
-    chute = int(input('Introduza a sua tentativa: '))
-    # O erro acontecia pois a tentativa nuna
-    # era aumentava.
+while tentativa < tentativas:
+    print("=" * 40)
+    print(f"Tentativas restantes: {tentativas - tentativa}")
+    chute = int(input('Introduza a sua tentativa:\n> '))
     tentativa += 1
 
     if numero == chute:
-        print('Parabéns, você acertou o número!')
+        print(f'Parabéns, você acertou o número em {tentativa} tentativas!')
         break
-    else:
-        if numero < chute:
+    elif numero < chute:
             print('O número é menor que a sua tentativa.')
-        if numero > chute:
+    elif numero > chute:
             print('O número é maior que a sua tentativa.')
 else:
     print("Infelizmente você usou todas as tentativas!")
